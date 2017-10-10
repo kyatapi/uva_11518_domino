@@ -7,6 +7,8 @@ inline void run_test(int argc, char **argv) {}
 
 #include <sstream>
 #include <set>
+#include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -22,7 +24,7 @@ public:
 
 private:
     set<size_t> fallen_dominoes;
-    vector<set<size_t>> relationship;
+    vector< set<size_t> > relationship;
 };
 
 istream & operator >> (istream &is, DominoShow &rhs) {
