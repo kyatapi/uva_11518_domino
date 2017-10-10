@@ -6,6 +6,7 @@ inline void run_test(int argc, char **argv) {}
 #endif // !ONLINE_JUDGE
 
 #include <sstream>
+#include <set>
 
 using namespace std;
 
@@ -15,12 +16,28 @@ public:
     ~DominoShow() {}
 
     void proceed() {}
-    size_t number_of_fall() { return 0; }
+    size_t number_of_fall() { return fallen_dominoes.size(); }
 
     friend istream & operator >> (istream &is, DominoShow &rhs);
+
+private:
+    set<size_t> fallen_dominoes;
 };
 
 istream & operator >> (istream &is, DominoShow &rhs) {
+    int domino_count = 0, relation_count = 0, toppling_count = 0;
+    is >> domino_count >> relation_count >> toppling_count;
+    for (; relation_count > 0; --relation_count) {
+        size_t the_former = 0, the_later = 0;
+        is >> the_former >> the_later;
+    }
+
+    for (; toppling_count > 0; --toppling_count) {
+        size_t toppled = 0;
+        is >> toppled;
+        rhs.fallen_dominoes.insert(toppled);
+    }
+
     return is;
 }
 
