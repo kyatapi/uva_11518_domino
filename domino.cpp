@@ -15,21 +15,25 @@ public:
     DominoShow() {}
     ~DominoShow() {}
 
-    void proceed() {}
+    void proceed();
     size_t number_of_fall() { return fallen_dominoes.size(); }
 
     friend istream & operator >> (istream &is, DominoShow &rhs);
 
 private:
     set<size_t> fallen_dominoes;
+    vector<set<size_t>> relationship;
 };
 
 istream & operator >> (istream &is, DominoShow &rhs) {
     int domino_count = 0, relation_count = 0, toppling_count = 0;
     is >> domino_count >> relation_count >> toppling_count;
+    rhs.relationship.resize(domino_count);
+
     for (; relation_count > 0; --relation_count) {
         size_t the_former = 0, the_later = 0;
         is >> the_former >> the_later;
+        rhs.relationship[the_former - 1].insert(the_later);
     }
 
     for (; toppling_count > 0; --toppling_count) {
@@ -39,6 +43,19 @@ istream & operator >> (istream &is, DominoShow &rhs) {
     }
 
     return is;
+}
+
+void DominoShow::proceed() {
+    set<size_t> candidates = fallen_dominoes;
+    while (!candidates.empty()) {
+        set<size_t> to_proceed = candidates;
+        candidates.clear();
+        for (size_t toppled : to_proceed) {
+            for (size_t the_later : relationship[toppled - 1]) {
+                if (fallen_dominoes.insert(the_later).second) candidates.insert(the_later);
+            }
+        }
+    }
 }
 
 size_t proceed_domino_show(istream& iss) {
